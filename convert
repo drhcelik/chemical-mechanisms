@@ -26,12 +26,12 @@ echo "[$0] Running ck2cti..."
     if [ -f "$CHEMKIN_TRANSPORT" ]; then
         TRANSPORT_OPTION=--transport=$CHEMKIN_TRANSPORT
     fi
-    python -m cantera.ck2cti --input=$CHEMKIN_CHEM $THERMO_OPTION $TRANSPORT_OPTION -d --output=$CANTERA_CHEM --permissive | tee $MECH/log.ck2cti
+    python3 -m cantera.ck2cti --input=$CHEMKIN_CHEM $THERMO_OPTION $TRANSPORT_OPTION -d --output=$CANTERA_CHEM --permissive | tee $MECH/log.ck2cti
 echo "[$0] Done"
 fi
 
 echo "[$0] Running cti2yaml..."
-python -m cantera.cti2yaml $CANTERA_CHEM
+python3 -m cantera.cti2yaml $CANTERA_CHEM
 echo "[$0] Done"
 
 echo "[$0] Running ct2foam..."
@@ -39,7 +39,7 @@ echo "[$0] Running ct2foam..."
 echo "[$0] Done"
 
 echo "[$0] Running pyjac2foam..."
-    python -m pyjac --lang c --last_species N2 --input $CANTERA_CHEM | tee $MECH/log.pyjac
+    python3 -m pyjac --lang c --last_species N2 --input $CANTERA_CHEM | tee $MECH/log.pyjac
     pyjac2foam.sh -m $CANTERA_CHEM -i out -c | tee $MECH/log.pyjac2foam
     mv foam $DIR_PYJAC/
     mv lib $DIR_PYJAC/
