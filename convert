@@ -18,7 +18,7 @@ if [ -f "$CANTERA_ORIG_CHEM" ]; then
 echo "[$0] Found original .cti file! Skipping ck2cti run..."
 cp $CANTERA_ORIG_CHEM $CANTERA_CHEM
 else
-echo "[$0] Running ck2cti..."
+echo "[$0] Running ck2yaml..."
     # check if file exists, because for some mechs .inp has all the data
     if [ -f "$CHEMKIN_THERMO" ]; then
         THERMO_OPTION=--thermo=$CHEMKIN_THERMO
@@ -26,13 +26,9 @@ echo "[$0] Running ck2cti..."
     if [ -f "$CHEMKIN_TRANSPORT" ]; then
         TRANSPORT_OPTION=--transport=$CHEMKIN_TRANSPORT
     fi
-    python3 -m cantera.ck2cti --input=$CHEMKIN_CHEM $THERMO_OPTION $TRANSPORT_OPTION -d --output=$CANTERA_CHEM --permissive | tee $MECH/log.ck2cti
+    python3 -m cantera.ck2yaml --input=$CHEMKIN_CHEM $THERMO_OPTION $TRANSPORT_OPTION --output=$CANTERA_CHEM --permissive | tee $MECH/log.ck2yaml
 echo "[$0] Done"
 fi
-
-echo "[$0] Running cti2yaml..."
-python3 -m cantera.cti2yaml $CANTERA_CHEM
-echo "[$0] Done"
 
 echo "[$0] Running ct2foam..."
     ct2foam --input $CANTERA_CHEM --output $DIR_PYJAC --Tmid 1000.0 --plot | tee $MECH/log.ct2foam
